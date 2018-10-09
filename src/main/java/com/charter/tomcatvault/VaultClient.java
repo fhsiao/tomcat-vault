@@ -9,10 +9,10 @@ public class VaultClient {
     public static String getVault() throws VaultException {
         final VaultConfig config =
                 new VaultConfig()
-                        .address(PROP.proto+"://"+PROP.host+":"+PROP.port)
-                        .token(PROP.token)
-                        .openTimeout(Integer.getInteger(PROP.openTimeout))
-                        .readTimeout(Integer.getInteger(PROP.readTimeout))
+                        .address(PROP.getProto()+"://"+PROP.getHost()+":"+PROP.getPort())
+                        .token(PROP.getToken())
+                        .openTimeout(Integer.getInteger(PROP.getOpenTimeout()))
+                        .readTimeout(Integer.getInteger(PROP.getReadTimeout()))
                         //    .sslPemFile("/path/on/disk.pem")
                         ////  See also: "sslPemUTF8()" and "sslPemResource()"
                         //    .sslVerify(false)
@@ -28,8 +28,8 @@ public class VaultClient {
 
         // Read operation
         final String value = vault.logical()
-                .read(PROP.path)
-                .getData().get(PROP.user);
+                .read(PROP.getPath())
+                .getData().get(PROP.getUser());
         return value;
     }
 }

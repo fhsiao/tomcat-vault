@@ -2,6 +2,10 @@ plugins {
     id 'java'
 }
 
+jar {
+    archiveName 'tomcatvault.jar'
+}
+
 group 'com.charter.tomcatvault'
 version '1.0-SNAPSHOT'
 
