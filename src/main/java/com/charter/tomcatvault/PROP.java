@@ -10,19 +10,24 @@ import java.util.Properties;
 
 public class PROP{
     private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(PROP.class);
     static private HashMap<String, String> map = new HashMap<>();
 
     static {
+        // Load a vault.properties file from where the jar file is run to a map
         File f = new File("vault.properties");
         if(f.exists() && !f.isDirectory()) {
             try (InputStream in = new FileInputStream("vault.properties")) {
                 Properties prop = new Properties();
                 prop.load(in);
                 for (String name: prop.stringPropertyNames()) {
-//                    System.out.println(name+"::"+prop.getProperty(name));
                     map.put(name, prop.getProperty(name));
                 }
-//                map.forEach((k, v) -> System.out.println("====="+(k + "::" + v)));
+                if(logger.isDebugEnabled()) {
+                    map.forEach((k, v) -> logger.debug((k + "::" + v)));
+                }
+
+                // Validate the map
                 if(!map.containsKey("token")||map.get("token").isEmpty()||map.get("token")==null)
                     throw new InvalidParameterException(MessageFormat.format("Missing value for key:: {0}!", "token"));
                     //throw new RuntimeException(MessageFormat.format("Missing value for key {0}!", token));
@@ -45,6 +50,7 @@ public class PROP{
             }
             System.out.println();
         } else {
+            // Create a default vault.properties file
             String name              = "vault.properties";
             String version           = "v.1";
             String token             = "25e4df62-4633-603c-1bdb-001d5f0154b9";
