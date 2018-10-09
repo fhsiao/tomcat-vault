@@ -26,7 +26,6 @@ public class PROP{
                 if(logger.isDebugEnabled()) {
                     map.forEach((k, v) -> logger.debug((k + "::" + v)));
                 }
-
                 // Validate the map
                 if(!map.containsKey("token")||map.get("token").isEmpty()||map.get("token")==null)
                     throw new InvalidParameterException(MessageFormat.format("Missing value for key:: {0}!", "token"));
@@ -46,9 +45,11 @@ public class PROP{
                 if(!map.containsKey("readTimeout")||map.get("readTimeout").isEmpty()||map.get("readTimeout")==null)
                     throw new InvalidParameterException(MessageFormat.format("Missing value for key:: {0}!", "readTimeout"));
             } catch (IOException e) {
+                if(logger.isDebugEnabled()) {
+                    logger.debug(e.getMessage(), e.fillInStackTrace());
+                }
                 e.printStackTrace();
             }
-            System.out.println();
         } else {
             // Create a default vault.properties file
             String name              = "vault.properties";
@@ -85,10 +86,20 @@ public class PROP{
                         "user       ="+user         +"\n" +
                         "openTimeout="+openTimeout  +"\n" +
                         "readTimeout="+readTimeout);
+                if(logger.isDebugEnabled()) {
+                    logger.debug("Generating vault.properties file");
+                }
             } catch (IOException e) {
+                if(logger.isDebugEnabled()) {
+                    logger.debug(e.getMessage(), e.fillInStackTrace());
+                }
                 e.printStackTrace();
             }
         }
+    }
+
+    public static int getSize(){
+        return map.size();
     }
 
     public static String getToken() {

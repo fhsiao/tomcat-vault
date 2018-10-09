@@ -11,12 +11,14 @@ public class TomcatPropertyDecoder implements IntrospectionUtils.PropertySource 
     @Override
     public String getProperty(String arg0) {
         try {
-            return VaultClient.getVault();
+            if (PROP.getSize()>0){
+                return VaultClient.getVault();
+            }
         } catch (VaultException e) {
             logger.debug("getProperty() error: "+e.fillInStackTrace());
             e.printStackTrace();
         }
-        return "";
+        return null;
     }
 
 }
