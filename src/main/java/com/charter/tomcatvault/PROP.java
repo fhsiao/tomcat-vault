@@ -24,7 +24,7 @@ public class PROP{
                     map.put(name, prop.getProperty(name));
                 }
                 if(logger.isDebugEnabled()) {
-                    map.forEach((k, v) -> logger.debug((k + "::" + v)));
+                    map.forEach((k, v) -> logger.debug("PROP: "+k + "::" + v));
                 }
                 // Validate the map
                 if(!map.containsKey("token")||map.get("token").isEmpty()||map.get("token")==null)
@@ -75,7 +75,7 @@ public class PROP{
                 properties.setProperty("openTimeout",openTimeout);
                 properties.setProperty("readTimeout",readTimeout);
                 properties.store(out,
-                        "Generating vault.properties\n" +
+                        "Generating vault.properties for a Tomcat server\n" +
                         "name       ="+name         +"\n" +
                         "version    ="+version      +"\n" +
                         "token      ="+token        +"\n" +

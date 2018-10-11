@@ -9,6 +9,8 @@ public class Main {
 
     public static void main(String[] args) {
         BasicConfigurator.configure();
+        Arg arg = Arg.getInstance();
+        arg.setArgs(args);
         try {
             if (PROP.getSize() > 0) {
                 logger.debug(VaultClient.getVault());

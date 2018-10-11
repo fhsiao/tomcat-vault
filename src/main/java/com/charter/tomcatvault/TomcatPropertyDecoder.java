@@ -7,9 +7,11 @@ import org.apache.tomcat.util.IntrospectionUtils;
 
 public class TomcatPropertyDecoder implements IntrospectionUtils.PropertySource {
     private static final Logger logger = Logger.getLogger(TomcatPropertyDecoder.class);
-
     @Override
     public String getProperty(String arg0) {
+        String[] args = arg0.split(" ");
+        Arg arg = Arg.getInstance();
+        arg.setArgs(args);
         try {
             if (PROP.getSize()>0){
                 return VaultClient.getVault();
