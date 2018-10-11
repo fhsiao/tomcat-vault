@@ -131,7 +131,7 @@ public class PROP{
 
     public static void setResourceToken(String resourceName, String token) {
         if(resourceMap.containsKey(resourceName)) {
-            updateKVWarning(resourceName, token);
+            updateKVWarning(resourceName, "token", token);
         }
         resourceMap.get(resourceName).replace("token", token);
     }
@@ -148,7 +148,7 @@ public class PROP{
 
     public static void setResourcePoto(String resourceName, String poto) {
         if(resourceMap.containsKey(resourceName)) {
-            updateKVWarning(resourceName, poto);
+            updateKVWarning(resourceName, "poto", poto);
         }
         resourceMap.get(resourceName).replace("poto", poto);
     }
@@ -165,7 +165,7 @@ public class PROP{
 
     public static void setResourceHost(String resourceName, String host) {
         if(resourceMap.containsKey(resourceName)) {
-            updateKVWarning(resourceName, host);
+            updateKVWarning(resourceName, "host", host);
         }
         resourceMap.get(resourceName).replace("host", host);
     }
@@ -182,7 +182,7 @@ public class PROP{
 
     public static void setResourcePort(String resourceName, String port) {
         if(resourceMap.containsKey(resourceName)) {
-            updateKVWarning(resourceName, port);
+            updateKVWarning(resourceName, "port", port);
         }
         resourceMap.get(resourceName).replace("port", port);
     }
@@ -199,7 +199,7 @@ public class PROP{
 
     public static void setResourcePath(String resourceName, String path) {
         if(resourceMap.containsKey(resourceName)) {
-            updateKVWarning(resourceName, path);
+            updateKVWarning(resourceName, "path", path);
         }
         resourceMap.get(resourceName).replace("path", path);
     }
@@ -216,7 +216,7 @@ public class PROP{
 
     public static void setResourceUser(String resourceName, String user) {
         if(resourceMap.containsKey(resourceName)) {
-            updateKVWarning(resourceName, user);
+            updateKVWarning(resourceName, "user", user);
         }
         resourceMap.get(resourceName).replace("user", user);
     }
@@ -233,7 +233,7 @@ public class PROP{
 
     public static void setResourceOpenTimeout(String resourceName, String openTimeout) {
         if(resourceMap.containsKey(resourceName)) {
-            updateKVWarning(resourceName, openTimeout);
+            updateKVWarning(resourceName, "openTimeout", openTimeout);
         }
         resourceMap.get(resourceName).replace("openTimeout", openTimeout);
     }
@@ -250,15 +250,15 @@ public class PROP{
 
     public static void setResourceReadTimeout(String resourceName, String readTimeout) {
         if(resourceMap.containsKey(resourceName)) {
-            updateKVWarning(resourceName, readTimeout);
+            updateKVWarning(resourceName, "readTimeout", readTimeout);
         }
         resourceMap.get(resourceName).replace("readTimeout", readTimeout);
     }
 
-    public static void updateKVWarning(String resourceName, String value){
+    public static void updateKVWarning(String resourceName, String key, String value){
         HashMap<String,String> map = resourceMap.get(resourceName);
-        if(map.containsKey(value)){
-            logger.warn("Overwriting the:" + value + " for the resource::" + resourceName);
+        if(map.containsKey(key)){
+            logger.warn("Overwriting the value of the " + key + " to " + value + " for the resource of::" + resourceName);
         }
     }
 
