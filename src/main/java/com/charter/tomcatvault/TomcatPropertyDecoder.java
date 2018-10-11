@@ -1,8 +1,8 @@
 package com.charter.tomcatvault;
 
+import com.bettercloud.vault.VaultException;
 import org.apache.log4j.Logger;
 import org.apache.tomcat.util.IntrospectionUtils;
-
 import java.util.regex.Pattern;
 
 
@@ -17,7 +17,13 @@ public class TomcatPropertyDecoder implements IntrospectionUtils.PropertySource 
                 logger.debug("Processed ARG::" + s);
             }
             Arg arg = Arg.getInstance();
-            arg.setArgs(args);
+            try {
+                String res = arg.setArgs(args);
+                logger.debug("Receiving a resource name::" + res);
+                return VaultClient.getVault(res);
+            } catch (VaultException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

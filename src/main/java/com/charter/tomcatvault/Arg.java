@@ -10,6 +10,7 @@ import java.util.Properties;
 public class Arg {
 
     private static final Logger logger = Logger.getLogger(Arg.class);
+    private static String resourceName;
     private String[] args = null;
     private Options options = new Options();
     private static Arg arg;
@@ -22,7 +23,7 @@ public class Arg {
         return arg;
     }
 
-    public void setArgs(String[] args) {
+    public String setArgs(String[] args) {
         this.args = args;
             final Option pward = Option.builder("P")
                     .longOpt("path")
@@ -56,10 +57,7 @@ public class Arg {
                     .addOption(token)
                     .addOption(uname)
                     .addOption(help);
-            this.parse();
-    }
 
-    private void parse() {
         CommandLineParser parser = new RelaxedParser();
         CommandLine cmd = null;
         try {
@@ -70,24 +68,27 @@ public class Arg {
             if (cmd.hasOption("U")) {
                 Properties prop = cmd.getOptionProperties("U");
                 prop.forEach((k, v) -> {
-                    PROP.addResource((String)k);
-                    PROP.setResourceUser((String)k,(String)v);
+                    PROP.addResource((String) k);
+                    PROP.setResourceUser((String) k, (String) v);
+                    setResourceName((String)k);
                     logger.debug("PROP_U: " + k + "::" + v);
                 });
             }
             if (cmd.hasOption("P")) {
                 Properties prop = cmd.getOptionProperties("P");
                 prop.forEach((k, v) -> {
-                    PROP.addResource((String)k);
-                    PROP.setResourcePath((String)k,(String)v);
+                    PROP.addResource((String) k);
+                    PROP.setResourcePath((String) k, (String) v);
+                    setResourceName((String)k);
                     logger.debug("PROP_P: " + k + "::" + v);
                 });
             }
             if (cmd.hasOption("T")) {
                 Properties prop = cmd.getOptionProperties("T");
                 prop.forEach((k, v) -> {
-                    PROP.addResource((String)k);
-                    PROP.setResourceToken((String)k,(String)v);
+                    PROP.addResource((String) k);
+                    PROP.setResourceToken((String) k, (String) v);
+                    setResourceName((String)k);
                     logger.debug("PROP_T: " + k + "::" + v);
                 });
             }
@@ -97,6 +98,7 @@ public class Arg {
             }
             help();
         }
+        return getResourceName();
     }
 
     private void help() {
@@ -105,6 +107,14 @@ public class Arg {
         final String usageHeader = "Usage of Tomcat Property Decoder";
         final String usageFooter = "\n  **** Please contact VOES for further details. ****\n";
         formatter.printHelp(130, syntax, usageHeader, options, usageFooter, true);
+    }
+
+    private static String getResourceName() {
+        return resourceName;
+    }
+
+    private static void setResourceName(String resourceName) {
+        Arg.resourceName = resourceName;
     }
 }
 
