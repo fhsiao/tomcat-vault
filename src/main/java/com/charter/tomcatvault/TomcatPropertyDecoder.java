@@ -1,26 +1,24 @@
 package com.charter.tomcatvault;
 
-import com.bettercloud.vault.VaultException;
 import org.apache.log4j.Logger;
 import org.apache.tomcat.util.IntrospectionUtils;
+
+import java.util.regex.Pattern;
 
 
 public class TomcatPropertyDecoder implements IntrospectionUtils.PropertySource {
     private static final Logger logger = Logger.getLogger(TomcatPropertyDecoder.class);
     @Override
     public String getProperty(String arg0) {
-        String[] args = arg0.split(" ");
-        Arg arg = Arg.getInstance();
-        arg.setArgs(args);
-        try {
-            if (PROP.getSize()>0){
-                return VaultClient.getVault();
+        if(arg0.startsWith("-")) {      // get rid of noises
+            logger.debug("Receiving ARG::" + arg0);
+            String[] args = arg0.split(Pattern.quote("|"));
+            for (String s : args) {
+                logger.debug("Processed ARG::" + s);
             }
-        } catch (VaultException e) {
-            logger.debug("getProperty() error: "+e.fillInStackTrace());
-            e.printStackTrace();
+            Arg arg = Arg.getInstance();
+            arg.setArgs(args);
         }
         return null;
     }
-
 }

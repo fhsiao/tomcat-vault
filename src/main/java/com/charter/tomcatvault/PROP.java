@@ -9,40 +9,41 @@ import java.util.HashMap;
 import java.util.Properties;
 
 public class PROP{
-    private static final long serialVersionUID = 1L;
-    private static final Logger logger = Logger.getLogger(PROP.class);
-    static private HashMap<String, String> map = new HashMap<>();
+    static private final long serialVersionUID = 1L;
+    static private final Logger logger = Logger.getLogger(PROP.class);
+    static private final HashMap<String, String> globalPropMap = new HashMap<>();
+    static private final HashMap<String, HashMap<String,String>> resourceMap = new HashMap<>();
 
     static {
-        // Load a vault.properties file from where the jar file is run to a map
+        // Load a vault.properties file from where the jar file is run to a globalPropMap
         File f = new File("vault.properties");
         if(f.exists() && !f.isDirectory()) {
             try (InputStream in = new FileInputStream("vault.properties")) {
                 Properties prop = new Properties();
                 prop.load(in);
                 for (String name: prop.stringPropertyNames()) {
-                    map.put(name, prop.getProperty(name));
+                    globalPropMap.put(name, prop.getProperty(name));
                 }
                 if(logger.isDebugEnabled()) {
-                    map.forEach((k, v) -> logger.debug("PROP: "+k + "::" + v));
+                    globalPropMap.forEach((k, v) -> logger.debug("PROP: "+k + "::" + v));
                 }
-                // Validate the map
-                if(!map.containsKey("token")||map.get("token").isEmpty()||map.get("token")==null)
+                // Validate the globalPropMap
+                if(!globalPropMap.containsKey("token")|| globalPropMap.get("token").isEmpty()|| globalPropMap.get("token")==null)
                     throw new InvalidParameterException(MessageFormat.format("Missing value for key:: {0}!", "token"));
                     //throw new RuntimeException(MessageFormat.format("Missing value for key {0}!", token));
-                if(!map.containsKey("proto")||map.get("proto").isEmpty()||map.get("proto")==null)
-                    throw new InvalidParameterException(MessageFormat.format("Missing value for key:: {0}!", "proto"));
-                if(!map.containsKey("host")||map.get("host").isEmpty()||map.get("host")==null)
+                if(!globalPropMap.containsKey("poto")|| globalPropMap.get("poto").isEmpty()|| globalPropMap.get("poto")==null)
+                    throw new InvalidParameterException(MessageFormat.format("Missing value for key:: {0}!", "poto"));
+                if(!globalPropMap.containsKey("host")|| globalPropMap.get("host").isEmpty()|| globalPropMap.get("host")==null)
                     throw new InvalidParameterException(MessageFormat.format("Missing value for key:: {0}!", "host"));
-                if(!map.containsKey("port")||map.get("port").isEmpty()||map.get("port")==null)
+                if(!globalPropMap.containsKey("port")|| globalPropMap.get("port").isEmpty()|| globalPropMap.get("port")==null)
                     throw new InvalidParameterException(MessageFormat.format("Missing value for key:: {0}!", "port"));
-                if(!map.containsKey("path")||map.get("path").isEmpty()||map.get("path")==null)
+                if(!globalPropMap.containsKey("path")|| globalPropMap.get("path").isEmpty()|| globalPropMap.get("path")==null)
                     throw new InvalidParameterException(MessageFormat.format("Missing value for key:: {0}!", "path"));
-                if(!map.containsKey("user")||map.get("user").isEmpty()||map.get("user")==null)
+                if(!globalPropMap.containsKey("user")|| globalPropMap.get("user").isEmpty()|| globalPropMap.get("user")==null)
                     throw new InvalidParameterException(MessageFormat.format("Missing value for key:: {0}!", "user"));
-                if(!map.containsKey("openTimeout")||map.get("openTimeout").isEmpty()||map.get("openTimeout")==null)
+                if(!globalPropMap.containsKey("openTimeout")|| globalPropMap.get("openTimeout").isEmpty()|| globalPropMap.get("openTimeout")==null)
                     throw new InvalidParameterException(MessageFormat.format("Missing value for key:: {0}!", "openTimeout"));
-                if(!map.containsKey("readTimeout")||map.get("readTimeout").isEmpty()||map.get("readTimeout")==null)
+                if(!globalPropMap.containsKey("readTimeout")|| globalPropMap.get("readTimeout").isEmpty()|| globalPropMap.get("readTimeout")==null)
                     throw new InvalidParameterException(MessageFormat.format("Missing value for key:: {0}!", "readTimeout"));
             } catch (IOException e) {
                 if(logger.isDebugEnabled()) {
@@ -55,7 +56,7 @@ public class PROP{
             String name              = "vault.properties";
             String version           = "v.1";
             String token             = "25e4df62-4633-603c-1bdb-001d5f0154b9";
-            String proto             = "http";
+            String poto              = "http";
             String host              = "172.17.0.5";
             String port              = "8200";
             String path              = "secret/hello";
@@ -67,7 +68,7 @@ public class PROP{
                 properties.setProperty("name"       ,"Vault Properties");
                 properties.setProperty("version"    ,"1");
                 properties.setProperty("host"       ,host);
-                properties.setProperty("proto"      ,proto);
+                properties.setProperty("poto"       ,poto);
                 properties.setProperty("port"       ,port);
                 properties.setProperty("token"      ,token);
                 properties.setProperty("path"       ,path);
@@ -79,7 +80,7 @@ public class PROP{
                         "name       ="+name         +"\n" +
                         "version    ="+version      +"\n" +
                         "token      ="+token        +"\n" +
-                        "proto      ="+proto        +"\n" +
+                        "poto       ="+poto         +"\n" +
                         "host       ="+host         +"\n" +
                         "port       ="+port         +"\n" +
                         "path       ="+path         +"\n" +
@@ -98,96 +99,259 @@ public class PROP{
         }
     }
 
-    public static int getSize(){
-        return map.size();
+    public static boolean addResource(String resourceName){
+        if(!resourceMap.containsKey(resourceName)) {
+            logger.debug("Adding a new property map for the resource: " + resourceName);
+            resourceMap.put(resourceName,(HashMap<String, String>) globalPropMap.clone());
+            return true;
+        }
+        return false;
     }
 
-    public static String getToken() {
-        if(map.containsKey("token")){
-            return map.get("token");
+    public static HashMap getResourceMap(){
+        return resourceMap;
+    }
+
+    public static int getResourceSize(String resourceName){
+        if(resourceMap.containsKey(resourceName)) {
+            return resourceMap.get(resourceName).size();
+        }
+        return 0;
+    }
+
+    public static String getResourceToken(String resourceName) {
+        if(resourceMap.containsKey(resourceName)) {
+            HashMap<String,String> map = resourceMap.get(resourceName);
+            if (map.containsKey("token")) {
+                return map.get("token");
+            }
         }
         return null;
     }
 
-    public static void setToken(String token) {
-        map.put(token, map.get(token) + 1);
+    public static void setResourceToken(String resourceName, String token) {
+        if(resourceMap.containsKey(resourceName)) {
+            updateKVWarning(resourceName, token);
+        }
+        resourceMap.get(resourceName).replace("token", token);
     }
 
-    public static String getProto() {
-        if(map.containsKey("proto")){
-            return map.get("proto");
+    public static String getResourcePoto(String resourceName) {
+        if(resourceMap.containsKey(resourceName)) {
+            HashMap<String,String> map = resourceMap.get(resourceName);
+            if (map.containsKey("poto")) {
+                return map.get("poto");
+            }
         }
         return null;
     }
 
-    public static void setProto(String proto) {
-        map.put(proto, map.get(proto) + 1);
+    public static void setResourcePoto(String resourceName, String poto) {
+        if(resourceMap.containsKey(resourceName)) {
+            updateKVWarning(resourceName, poto);
+        }
+        resourceMap.get(resourceName).replace("poto", poto);
     }
 
-    public static String getHost() {
-        if(map.containsKey("host")){
-            return map.get("host");
+    public static String getResourceHost(String resourceName) {
+        if(resourceMap.containsKey(resourceName)) {
+            HashMap<String,String> map = resourceMap.get(resourceName);
+            if (map.containsKey("host")) {
+                return map.get("host");
+            }
         }
         return null;
     }
 
-    public static void setHost(String host) {
-        map.put(host, map.get(host) + 1);
+    public static void setResourceHost(String resourceName, String host) {
+        if(resourceMap.containsKey(resourceName)) {
+            updateKVWarning(resourceName, host);
+        }
+        resourceMap.get(resourceName).replace("host", host);
     }
 
-    public static String getPort() {
-        if(map.containsKey("port")){
-            return map.get("port");
+    public static String getResourcePort(String resourceName) {
+        if(resourceMap.containsKey(resourceName)) {
+            HashMap<String,String> map = resourceMap.get(resourceName);
+            if (map.containsKey("port")) {
+                return map.get("port");
+            }
         }
         return null;
     }
 
-    public static void setPort(String port) {
-        map.put(port, map.get(port) + 1);
+    public static void setResourcePort(String resourceName, String port) {
+        if(resourceMap.containsKey(resourceName)) {
+            updateKVWarning(resourceName, port);
+        }
+        resourceMap.get(resourceName).replace("port", port);
     }
 
-    public static String getPath() {
-        if(map.containsKey("path")){
-            return map.get("path");
+    public static String getResourcePath(String resourceName) {
+        if(resourceMap.containsKey(resourceName)) {
+            HashMap<String,String> map = resourceMap.get(resourceName);
+            if (map.containsKey("path")) {
+                return map.get("path");
+            }
         }
         return null;
     }
 
-    public static void setPath(String path) {
-        map.put(path, map.get(path) + 1);
+    public static void setResourcePath(String resourceName, String path) {
+        if(resourceMap.containsKey(resourceName)) {
+            updateKVWarning(resourceName, path);
+        }
+        resourceMap.get(resourceName).replace("path", path);
     }
 
-    public static String getUser() {
-        if(map.containsKey("user")){
-            return map.get("user");
+    public static String getResourceUser(String resourceName) {
+        if(resourceMap.containsKey(resourceName)) {
+            HashMap<String,String> map = resourceMap.get(resourceName);
+            if (map.containsKey("user")) {
+                return map.get("user");
+            }
         }
         return null;
     }
 
-    public static void setUser(String user) {
-        map.put(user, map.get(user) + 1);
+    public static void setResourceUser(String resourceName, String user) {
+        if(resourceMap.containsKey(resourceName)) {
+            updateKVWarning(resourceName, user);
+        }
+        resourceMap.get(resourceName).replace("user", user);
     }
 
-    public static String getOpenTimeout() {
-        if(map.containsKey("openTimeout")){
-            return map.get("openTimeout");
+    public static String getResourceOpenTimeout(String resourceName) {
+        if(resourceMap.containsKey(resourceName)) {
+            HashMap<String,String> map = resourceMap.get(resourceName);
+            if (map.containsKey("openTimeout")) {
+                return map.get("openTimeout");
+            }
         }
         return null;
     }
 
-    public static void setOpenTimeout(String openTimeout) {
-        map.put(openTimeout, map.get(openTimeout) + 1);
+    public static void setResourceOpenTimeout(String resourceName, String openTimeout) {
+        if(resourceMap.containsKey(resourceName)) {
+            updateKVWarning(resourceName, openTimeout);
+        }
+        resourceMap.get(resourceName).replace("openTimeout", openTimeout);
     }
 
-    public static String getReadTimeout() {
-        if(map.containsKey("readTimeout")){
-            return map.get("readTimeout");
+    public static String getResourceReadTimeout(String resourceName) {
+        if(resourceMap.containsKey(resourceName)) {
+            HashMap<String,String> map = resourceMap.get(resourceName);
+            if (map.containsKey("readTimeout")) {
+                return map.get("readTimeout");
+            }
         }
         return null;
     }
 
-    public static void setReadTimeout(String readTimeout) {
-        map.put(readTimeout, map.get(readTimeout) + 1);
+    public static void setResourceReadTimeout(String resourceName, String readTimeout) {
+        if(resourceMap.containsKey(resourceName)) {
+            updateKVWarning(resourceName, readTimeout);
+        }
+        resourceMap.get(resourceName).replace("readTimeout", readTimeout);
+    }
+
+    public static void updateKVWarning(String resourceName, String value){
+        HashMap<String,String> map = resourceMap.get(resourceName);
+        if(map.containsKey(value)){
+            logger.warn("Overwriting the:" + value + " for the resource::" + resourceName);
+        }
+    }
+
+    public static int getGlobalSize(){
+        return globalPropMap.size();
+    }
+
+    public static String getGlobalToken() {
+        if(globalPropMap.containsKey("token")){
+            return globalPropMap.get("token");
+        }
+        return null;
+    }
+
+    public static void setGlobalToken(String token) {
+        globalPropMap.put(token, globalPropMap.get(token) + 1);
+    }
+
+    public static String getGlobalPoto() {
+        if(globalPropMap.containsKey("poto")){
+            return globalPropMap.get("poto");
+        }
+        return null;
+    }
+
+    public static void setGlobalPoto(String poto) {
+        globalPropMap.put(poto, globalPropMap.get(poto) + 1);
+    }
+
+    public static String getGlobalHost() {
+        if(globalPropMap.containsKey("host")){
+            return globalPropMap.get("host");
+        }
+        return null;
+    }
+
+    public static void setGlobalHost(String host) {
+        globalPropMap.put(host, globalPropMap.get(host) + 1);
+    }
+
+    public static String getGlobalPort() {
+        if(globalPropMap.containsKey("port")){
+            return globalPropMap.get("port");
+        }
+        return null;
+    }
+
+    public static void setGlobalPort(String port) {
+        globalPropMap.put(port, globalPropMap.get(port) + 1);
+    }
+
+    public static String getGlobalPath() {
+        if(globalPropMap.containsKey("path")){
+            return globalPropMap.get("path");
+        }
+        return null;
+    }
+
+    public static void setGlobalPath(String path) {
+        globalPropMap.put(path, globalPropMap.get(path) + 1);
+    }
+
+    public static String getGlobalUser() {
+        if(globalPropMap.containsKey("user")){
+            return globalPropMap.get("user");
+        }
+        return null;
+    }
+
+    public static void setGlobalUser(String user) {
+        globalPropMap.put(user, globalPropMap.get(user) + 1);
+    }
+
+    public static String getGlobalOpenTimeout() {
+        if(globalPropMap.containsKey("openTimeout")){
+            return globalPropMap.get("openTimeout");
+        }
+        return null;
+    }
+
+    public static void setGlobalOpenTimeout(String openTimeout) {
+        globalPropMap.put(openTimeout, globalPropMap.get(openTimeout) + 1);
+    }
+
+    public static String getGlobalReadTimeout() {
+        if(globalPropMap.containsKey("readTimeout")){
+            return globalPropMap.get("readTimeout");
+        }
+        return null;
+    }
+
+    public static void setGlobalReadTimeout(String readTimeout) {
+        globalPropMap.put(readTimeout, globalPropMap.get(readTimeout) + 1);
     }
 
 }
