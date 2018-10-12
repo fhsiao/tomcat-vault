@@ -6,6 +6,14 @@ import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 
+/**
+ *
+ *  The Main class with the main() method is part of the executable jar application to facilitate the need of testing the functionality
+ *          without Tomcat to be involved.
+ *
+ * Auther: Frank
+ */
+
 public class Main {
     private static final Logger logger = Logger.getLogger(Main.class);
 

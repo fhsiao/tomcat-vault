@@ -23,6 +23,17 @@ public class Arg {
         return arg;
     }
 
+    /**
+     *
+     * Configure the argument parsing options
+     * Parse the arguments against the receiving argument array.
+     *
+     * @param args         the specified array with arguments coming from CLI or Tomcat configuration files
+     *
+     * @return the resource name collected during the argument parsing
+     *
+     * Auther: Frank
+     */
     public String setArgs(String[] args) {
         this.args = args;
             final Option pward = Option.builder("P")
@@ -101,6 +112,12 @@ public class Arg {
         return getResourceName();
     }
 
+    /**
+     *
+     * Specify content of the help page.
+     *
+     * Auther: Frank
+     */
     private void help() {
         HelpFormatter formatter = new HelpFormatter();
         final String syntax = "Main";
@@ -109,15 +126,34 @@ public class Arg {
         formatter.printHelp(130, syntax, usageHeader, options, usageFooter, true);
     }
 
+    /**
+     *
+     * Getter of resourceName
+     *
+     * Auther: Frank
+     */
     private static String getResourceName() {
         return resourceName;
     }
 
+    /**
+     *
+     * Setter of resourceName
+     *
+     * Auther: Frank
+     */
     private static void setResourceName(String resourceName) {
         Arg.resourceName = resourceName;
     }
 }
 
+
+/**
+ *
+ * Ignore unexpected CLI arguments by overwriting parse() method of the DefaultParser
+ *
+ * Auther: Frank
+ */
 class RelaxedParser extends DefaultParser {
     private static final Logger logger = Logger.getLogger(Arg.class);
     @Override

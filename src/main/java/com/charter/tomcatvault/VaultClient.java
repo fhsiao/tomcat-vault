@@ -12,6 +12,8 @@ public class VaultClient {
      * @return the response from the Vault server
      * @throws VaultException if there are any problems encountered
      * while parsing the command line tokens.
+     *
+     * Auther: Frank
      */
     public static String getVault() throws VaultException {
         final VaultConfig config =
@@ -49,6 +51,8 @@ public class VaultClient {
      * @return the response from the Vault server
      * @throws VaultException if there are any problems encountered
      * while parsing the command line tokens.
+     *
+     * Auther: Frank
      */
     public static String getVault(String resourceName) throws VaultException {
         final VaultConfig config =

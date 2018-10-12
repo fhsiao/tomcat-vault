@@ -8,6 +8,17 @@ import java.util.regex.Pattern;
 
 public class TomcatPropertyDecoder implements IntrospectionUtils.PropertySource {
     private static final Logger logger = Logger.getLogger(TomcatPropertyDecoder.class);
+    /**
+     *
+     * Overriding the getProperty method to inject Vault Client responses
+     *
+     * @param arg0         receiving an argument string coming from Tomcat configuration files
+     *
+     * @return the response of Vault client to Tomcat system
+     *
+     * Auther: Frank
+     */
+
     @Override
     public String getProperty(String arg0) {
         if(arg0.startsWith("-")) {      // get rid of noises

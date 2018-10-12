@@ -8,6 +8,12 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * PROP class generates and reads the vault.properties file from the file system, stores it in a hash map that later can be cloned
+ *            for vault configurations of resource specified hash maps with different modifications.
+ *
+ * Auther: Frank
+ */
 public class PROP{
     static private final long serialVersionUID = 1L;
     static private final Logger logger = Logger.getLogger(PROP.class);
