@@ -3,9 +3,11 @@ package com.charter.tomcatvault;
 import com.bettercloud.vault.Vault;
 import com.bettercloud.vault.VaultConfig;
 import com.bettercloud.vault.VaultException;
+import org.apache.log4j.Logger;
 
 public class VaultClient {
     private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(VaultClient.class);
     /**
      * Send a request to Vault server according to the default properties from vault.properties file
      *
@@ -15,6 +17,7 @@ public class VaultClient {
      *
      * Auther: Frank
      */
+    private VaultClient(){}
     public static String getVault() throws VaultException {
         final VaultConfig config =
                 new VaultConfig()

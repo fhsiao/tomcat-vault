@@ -34,10 +34,12 @@ public class Main {
         PROP.addResource(resourceName);
         if (PROP.getGlobalSize() > 0) {
             try {
-                logger.debug(resourceName + ": "+VaultClient.getVault(resourceName)+" -- from Main()");
+                logger.debug(resourceName + ": " + VaultClient.getVault(resourceName) + " -- from Main()");
             } catch (VaultException e) {
-                logger.debug(e.getMessage(),e.fillInStackTrace());
+                logger.debug(e.getMessage(), e.fillInStackTrace());
             }
+        } else {
+            logger.debug("Unexpecting size of global map to be 0");
         }
         //// Testing args resources if any
         HashMap map = PROP.getResourceMap();

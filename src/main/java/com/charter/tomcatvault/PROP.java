@@ -31,7 +31,7 @@ public class PROP{
                     globalPropMap.put(name, prop.getProperty(name));
                 }
                 if(logger.isDebugEnabled()) {
-                    globalPropMap.forEach((k, v) -> logger.debug("PROP: "+k + "::" + v));
+                    globalPropMap.forEach((k, v) -> logger.debug("GLOBAL PROP: "+k + "::" + v));
                 }
                 // Validate the globalPropMap
                 if(!globalPropMap.containsKey("token")|| globalPropMap.get("token").isEmpty()|| globalPropMap.get("token")==null)

@@ -35,6 +35,9 @@ public class Arg {
      * Auther: Frank
      */
     public String setArgs(String[] args) {
+        if(args==null){
+            return null;
+        }
         this.args = args;
             final Option pward = Option.builder("P")
                     .longOpt("path")
