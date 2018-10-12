@@ -36,6 +36,6 @@ public class TomcatPropertyDecoder implements IntrospectionUtils.PropertySource 
                 e.printStackTrace();
             }
         }
-        return null;
+        return arg0;
     }
 }
