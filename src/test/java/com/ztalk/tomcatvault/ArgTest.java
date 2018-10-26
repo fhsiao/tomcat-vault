@@ -1,4 +1,4 @@
-package com.charter.tomcatvault;
+package com.ztalk.tomcatvault;
 
 import org.junit.After;
 import org.junit.Before;
@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class TomcatPropertyDecoderTest {
+public class ArgTest {
 
     @Before
     public void setUp() throws Exception {
@@ -17,6 +17,10 @@ public class TomcatPropertyDecoderTest {
     }
 
     @Test
-    public void getProperty() {
+    public void getInstance() {
+    }
+
+    @Test
+    public void setArgs() {
     }
 }

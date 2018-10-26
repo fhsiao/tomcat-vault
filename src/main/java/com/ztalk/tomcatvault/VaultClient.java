@@ -1,4 +1,4 @@
-package com.charter.tomcatvault;
+package com.ztalk.tomcatvault;
 
 import com.bettercloud.vault.Vault;
 import com.bettercloud.vault.VaultConfig;

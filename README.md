@@ -2,48 +2,35 @@
 
 Using Tomcat IntrospectionUtils to inject hashed password from HashiCrop Vault
 
-Installation:
+## Installation:
 
 Add into ${TOMCAT_HOME}/conf/catalina.properties:
 ```
-org.apache.tomcat.util.digester.PROPERTY_SOURCE=com.charter.tomcatvault.MyPropertyDecoder
+org.apache.tomcat.util.digester.PROPERTY_SOURCE=com.ztalk.tomcatvault.TomcatPropertyDecoder
 ```
 
 Add into ${TOMCAT_HOME}/conf/tomcat-users.xml:
 
 ```
-<user username="manager" password="${com.charter.tomcatvault.MyPropertyDecoder}" roles="manager-gui" />
+<user username="${-U res1=admin|-P res1=secret/user}" password="${-U res1=admin1|-P res1=secret/pass}" roles="manager-gui" />
 ```
 
 If the ROOT is set in the ${TOMCAT_HOME}/webapps, http://{host_ip}/tomcat-vault/hello is used to test password responded back from your Vault server.
 
 Add vault-java-driver-3.1.0.jar to ${TOMCAT_HOME}/lib
 
-
-Implemented:
-
-Vault client
-
-Tomcat property utility
-
-Java property file for Vault
+Add commons-cli-1.4.jar to ${TOMCAT_HOME}/lib
 
 
-
-TODO:
-
-Proper parameter injection
+## TODO:
 
 Supporting local encrypied password "without" Hashicorp Vault?
 
-Supporting multiple resources with different passwords?
+~~Supporting multiple resources with different passwords?~~
 
 Add release tag with compiled jar files
 
-Add loggings
+~~Add loggings~~
 
-Test cases
-
-*** Remove Java main ****
-
+~~Test cases~~
 

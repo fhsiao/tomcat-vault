@@ -6,7 +6,7 @@ jar {
     archiveName 'tomcatvault.jar'
 }
 
-group 'com.charter.tomcatvault'
+group 'com.ztalk.tomcatvault'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8

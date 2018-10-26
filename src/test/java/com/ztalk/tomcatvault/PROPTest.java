@@ -1,4 +1,4 @@
-package com.charter.tomcatvault;
+package com.ztalk.tomcatvault;
 
 import org.junit.After;
 import org.junit.Before;

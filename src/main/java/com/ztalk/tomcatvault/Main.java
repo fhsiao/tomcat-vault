@@ -1,4 +1,4 @@
-package com.charter.tomcatvault;
+package com.ztalk.tomcatvault;
 
 import com.bettercloud.vault.VaultException;
 import org.apache.log4j.BasicConfigurator;
@@ -24,7 +24,7 @@ public class Main {
         //// Testing global settings
         if (PROP.getGlobalSize() > 0) {
             try {
-                logger.debug("default: "+VaultClient.getVault());
+                VaultClient.getVault();
             } catch (VaultException e) {
                 logger.debug(e.getMessage(),e.fillInStackTrace());
             }
@@ -34,7 +34,7 @@ public class Main {
         PROP.addResource(resourceName);
         if (PROP.getGlobalSize() > 0) {
             try {
-                logger.debug(resourceName + ": " + VaultClient.getVault(resourceName) + " -- from Main()");
+                VaultClient.getVault(resourceName);
             } catch (VaultException e) {
                 logger.debug(e.getMessage(), e.fillInStackTrace());
             }
@@ -45,7 +45,7 @@ public class Main {
         HashMap map = PROP.getResourceMap();
         map.forEach((k,v) -> {
             try {
-                logger.debug(k+": "+VaultClient.getVault((String)k));
+                VaultClient.getVault((String)k);
             } catch (VaultException e) {
                 logger.debug(e.getMessage(),e.fillInStackTrace());
             }

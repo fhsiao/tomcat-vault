@@ -1,4 +1,4 @@
-package com.charter.tomcatvault;
+package com.ztalk.tomcatvault;
 
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
